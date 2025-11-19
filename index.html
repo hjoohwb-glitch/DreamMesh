@@ -16,25 +16,28 @@
   <script type="importmap">
 {
   "imports": {
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
     "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "three": "https://aistudiocdn.com/three@^0.181.1",
-    "three/": "https://aistudiocdn.com/three@^0.181.1/"
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "three": "https://aistudiocdn.com/three@^0.181.2",
+    "three/": "https://aistudiocdn.com/three@^0.181.2/"
   }
 }
 </script>
 </head>
   <body>
     <script>
-      // Shim for process.env.API_KEY for client-side environments like Vercel
-      // This allows 'services/geminiService.ts' to access the API_KEY as prescribed.
+      // Shim for process.env to prevent crash on Vercel/Client-side
       window.process = window.process || {};
       window.process.env = window.process.env || {};
-      // Vercel will substitute the actual API_KEY here during deployment if set
-      window.process.env.API_KEY = '__VERCEL_API_KEY__'; 
+      
+      // IMPORTANT: This ensures the app can read the API Key injected by the build system
+      // or provides a safe fallback to prevent crash on initialization.
+      window.process.env.API_KEY = window.process.env.API_KEY || 'API_KEY_PENDING'; 
     </script>
     <div id="root"></div>
+    <!-- CRITICAL: This links your HTML to your React code. Required for Vercel/Vite. -->
+    <script type="module" src="./index.tsx"></script>
   </body>
 </html>
