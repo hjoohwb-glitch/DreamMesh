@@ -143,9 +143,17 @@ const ThreeStage = forwardRef<ThreeStageHandle, {}>((props, ref) => {
       const originalPos = cameraRef.current.position.clone();
       const originalTarget = controlsRef.current?.target.clone() || new THREE.Vector3();
       
-      // Isolate object: Hide grid/helper for clean shot
+      // --- QC VIEW SETUP START ---
+      // Save original state
+      const originalBackground = sceneRef.current.background;
       const grid = sceneRef.current.children.find(c => c instanceof THREE.GridHelper);
-      if (grid) grid.visible = false;
+      const originalGridVisible = grid ? grid.visible : true;
+
+      // Use White background for QC to ensure dark models are visible (silhouetted)
+      sceneRef.current.background = new THREE.Color('#ffffff');
+      // Ensure grid is visible for spatial context
+      if (grid) grid.visible = true;
+      // --- QC VIEW SETUP END ---
 
       // --- Auto-Framing Logic ---
       // 1. Calculate Bounding Box
@@ -195,8 +203,11 @@ const ThreeStage = forwardRef<ThreeStageHandle, {}>((props, ref) => {
         await new Promise(r => setTimeout(r, 50)); 
       }
 
-      // Restore
-      if (grid) grid.visible = true;
+      // --- RESTORE START ---
+      sceneRef.current.background = originalBackground;
+      if (grid) grid.visible = originalGridVisible;
+      // --- RESTORE END ---
+
       cameraRef.current.position.copy(originalPos);
       if (controlsRef.current) controlsRef.current.target.copy(originalTarget);
       cameraRef.current.lookAt(originalTarget);
