@@ -276,6 +276,7 @@ export const generateAttachmentCode = async (
          - Position each clone correctly.
          - Add ALL clones to 'root'.
          - If it's a single item (e.g., "Turret"), just add 'part' to 'root'.
+       - **IMPORTANT**: Check the 'PART TO ATTACH' images. If the part is ALREADY a pair (e.g. two legs), TREAT IT AS ONE UNIT. Do not duplicate a pair to make 4 legs unless requested.
     
     5. **Final Step**:
        - Ensure 'part' (or its clones) is added to 'root' via 'root.add(part)'.

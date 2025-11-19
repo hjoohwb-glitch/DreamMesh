@@ -702,7 +702,7 @@ export default function App() {
         </div>
 
         {/* Component Plan View */}
-        <div className="h-64 bg-neutral-900 border-t border-gray-800 flex overflow-x-auto p-4 gap-4">
+        <div className="h-64 w-full bg-neutral-900 border-t border-gray-800 flex overflow-x-auto p-4 gap-4">
           {!buildPlan && <div className="w-full flex items-center justify-center text-gray-600 text-sm">Waiting for Plan...</div>}
           {buildPlan && buildPlan.components.map((comp) => {
             const artifact = components[comp.id];
@@ -713,7 +713,7 @@ export default function App() {
               isProcessing ? 'border-blue-500 bg-blue-900/10 animate-pulse' : 'border-gray-700 bg-gray-800/30';
 
             return (
-              <div key={comp.id} className={`min-w-[240px] p-4 rounded border ${statusColor} flex flex-col justify-between relative`}>
+              <div key={comp.id} className={`min-w-[240px] w-[240px] flex-shrink-0 p-4 rounded border ${statusColor} flex flex-col justify-between relative`}>
                 <div>
                   <div className="flex justify-between items-start mb-2">
                     <h4 className="font-bold text-sm text-gray-200 truncate">{comp.name}</h4>

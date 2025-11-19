@@ -37,7 +37,7 @@ export interface ComponentArtifact {
   retryCount: number;
   qcHistory: QCResult[];
   errorLogs: string[];
-  images?: string[];
+  images?: string[]; // Added field to store QC snapshots
 }
 
 export interface LogEntry {

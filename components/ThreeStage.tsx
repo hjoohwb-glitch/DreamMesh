@@ -149,9 +149,11 @@ const ThreeStage = forwardRef<ThreeStageHandle, {}>((props, ref) => {
       const grid = sceneRef.current.children.find(c => c instanceof THREE.GridHelper);
       const originalGridVisible = grid ? grid.visible : true;
 
-      // Use White background for QC to ensure dark models are visible (silhouetted)
+      // Use White background for QC to ensure dark models are visible (silhouetted against white)
+      // Also ensures transparency/gaps are obvious. 
       sceneRef.current.background = new THREE.Color('#ffffff');
-      // Ensure grid is visible for spatial context
+      
+      // Ensure grid is visible for spatial context (scale reference) during QC
       if (grid) grid.visible = true;
       // --- QC VIEW SETUP END ---
 
@@ -175,13 +177,14 @@ const ThreeStage = forwardRef<ThreeStageHandle, {}>((props, ref) => {
       if (maxDim === 0 || !isFinite(cameraDistance) || cameraDistance < 0.1) cameraDistance = 5;
 
       // 3. Define relative positions based on calculated distance
-      // Replaced orthogonal 6 views with 8 isometric corner views for better 3D context
+      // Replaced orthogonal 6 views with 8 isometric corner views for better 3D context and coverage
       const positions: THREE.Vector3[] = [];
       const signs = [1, -1];
 
       for (const x of signs) {
         for (const y of signs) {
           for (const z of signs) {
+            // Create a vector pointing to each of the 8 corners of a cube surrounding the object
             const dir = new THREE.Vector3(x, y, z).normalize();
             positions.push(dir.multiplyScalar(cameraDistance));
           }
