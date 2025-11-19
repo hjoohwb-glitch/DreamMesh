@@ -7,7 +7,19 @@ let ai: GoogleGenAI | null = null;
 
 const getAi = (): GoogleGenAI => {
   if (!ai) {
-    ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    // Robust API Key retrieval strategy:
+    // 1. Check process.env (Build-time/Node)
+    // 2. Check window.process shim (Runtime/Browser via index.html)
+    // 3. Use provided fallback test key (User requested failsafe)
+    const apiKey = process.env.API_KEY || 
+                   (typeof window !== 'undefined' ? (window as any).process?.env?.API_KEY : undefined) ||
+                   'AIzaSyBjjiRwQK1ayeHjlHZGWWUOQ06_oaB1mPA';
+
+    if (!apiKey) {
+      throw new Error("Critical: API Key is missing. Please set API_KEY in Vercel Environment Variables.");
+    }
+
+    ai = new GoogleGenAI({ apiKey });
   }
   return ai;
 };
